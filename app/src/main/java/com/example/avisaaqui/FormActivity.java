@@ -162,8 +162,13 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
         apiService.insertData(userId, vendorId, productId, latitude, longitude, value, new ApiService.ApiCallback() {
             @Override
             public void onSuccess(String response) {
-                Toast.makeText(FormActivity.this, "Dados inseridos com sucesso", Toast.LENGTH_LONG).show();
-                limparCampos();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(FormActivity.this, "Dados inseridos com sucesso", Toast.LENGTH_LONG).show();
+                        limparCampos();
+                    }
+                });
             }
 
             @Override
