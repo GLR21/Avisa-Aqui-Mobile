@@ -124,6 +124,8 @@ public class ApiService {
                     callback.onSuccess("Dados inseridos com sucesso");
                 } else {
                     Log.d("AvisaAqui", "Response code: " + response.code());
+                    Log.d("AvisaAqui", "Request data: " + data.toString());
+                    Log.d("AvisaAqui", "Body: " + response.body().string());
                     callback.onFailure("Falha ao inserir dados");
                 }
             }
