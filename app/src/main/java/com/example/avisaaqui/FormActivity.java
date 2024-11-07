@@ -44,6 +44,8 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
     private String latitude;
     private String longitude;
 
+    private String hint = "Informe um valor";
+
     private ApiService apiService;
 
     @RequiresApi(api = Build.VERSION_CODES.S)
@@ -84,6 +86,43 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
                 finish();
             }
         });
+
+        // Configurar o listener de seleção do Spinner
+        spinner_product_id.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // Obter o item selecionado
+                SpinnerItem selectedItem = (SpinnerItem) parent.getItemAtPosition(position);
+
+                // Atualizar o placeholder do EditText com o valor do campo desejado
+                switch(selectedItem.getType()){
+                    case "INT":
+                        hint = "Informe um valor inteiro";
+                        break;
+                    case "TEXT":
+                        hint = "Informe um texto";
+                        break;
+                    case "FLOAT":
+                        hint = "Informe um valor decimal";
+                        break;
+                    case "LOGIC":
+                        hint = "Informe um valor lógico (0 ou 1)";
+                        break;
+                    default:
+                        hint = "Informe um valor";
+                        break;
+                }
+
+                edit_text_value.setHint(hint);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Caso nada seja selecionado, se necessário, redefina o placeholder
+                edit_text_value.setHint("Selecione um item");
+            }
+        });
+
     }
 
     private void inserirDados() {
@@ -142,14 +181,14 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
             public void onSuccess(String response) {
                 try {
                     JSONArray jsonArray = new JSONArray(response);
-                    System.out.println( response );
                     List<SpinnerItem> items = new ArrayList<>();
+                    items.add(new SpinnerItem("", "Selecione um item", "", ""));
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jso = jsonArray.getJSONObject(i);
-                        items.add(new SpinnerItem(jso.getString("id"), jso.getString("description"), jso.getString("regex_validation")));
+                        items.add(new SpinnerItem(jso.getString("id"), jso.getString("description"), jso.getString("regex_validation"), jso.getString("type")));
                     }
                     SpinnerItemAdapter adapter = new SpinnerItemAdapter(FormActivity.this, items);
-                    System.out.println(items.toString());
+
                     // No Android, apenas a thread principal pode manipular elementos da interface do usuário. Para resolver isso, você pode utilizar o método runOnUiThread para garantir que as atualizações na interface sejam executadas na thread principal.
                     runOnUiThread(new Runnable() {
                         @Override
