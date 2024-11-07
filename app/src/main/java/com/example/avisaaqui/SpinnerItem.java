@@ -5,11 +5,13 @@ public class SpinnerItem {
     private String description;
 
     private String regex;
+    private String type;
 
-    public SpinnerItem(String value, String description, String regex ) {
+    public SpinnerItem(String value, String description, String regex, String type ) {
         this.value = value;
         this.description = description;
         this.regex       = regex;
+        this.type = type;
     }
 
     public String getValue() {
@@ -23,6 +25,10 @@ public class SpinnerItem {
     public String getRegex()
     {
         return regex;
+    }
+
+    public String getType() {
+        return type;
     }
 
     @Override
