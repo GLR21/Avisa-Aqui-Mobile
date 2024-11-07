@@ -35,8 +35,10 @@
         android:layout_marginStart="144dp"
         android:layout_marginTop="64dp"
         android:text="@string/button_abrir_consulta_label"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_abrir_insercao" />
+        app:layout_constraintTop_toBottomOf="@+id/button_abrir_insercao"
+        tools:visibility="gone" />
 
     <Button
         android:id="@+id/button_abrir_requisicao"
@@ -45,8 +47,10 @@
         android:layout_marginStart="144dp"
         android:layout_marginTop="64dp"
         android:text="@string/button_abrir_requisicao_label"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_abrir_consulta" />
+        app:layout_constraintTop_toBottomOf="@+id/button_abrir_consulta"
+        tools:visibility="gone" />
 
     <Button
         android:id="@+id/button_sair"
