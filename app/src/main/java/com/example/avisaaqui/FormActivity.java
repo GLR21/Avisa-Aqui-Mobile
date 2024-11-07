@@ -132,6 +132,11 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
         String vendorId = androidId + "_" + userId;
         String productId = spinnerItem.getValue();
 
+        if (spinnerItem.getValue().isEmpty()) {
+            Toast.makeText(FormActivity.this, "Selecione um item", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         String value = String.valueOf(edit_text_value.getText());
         String regex = spinnerItem.getRegex();
 
@@ -139,9 +144,19 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
             Pattern pattern = Pattern.compile(regex);
             Matcher matcher = pattern.matcher(value);
             if (!matcher.matches()) {
-                Toast.makeText(FormActivity.this, "Verifique o seu campo 'Value'", Toast.LENGTH_LONG).show();
+                Toast.makeText(FormActivity.this, hint, Toast.LENGTH_LONG).show();
                 return;
             }
+        }
+
+        if (value.trim().isEmpty()) {
+            Toast.makeText(FormActivity.this, hint, Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if ((latitude == null || latitude.trim().isEmpty()) || (longitude == null || longitude.trim().isEmpty())) {
+            Toast.makeText(FormActivity.this, "É preciso habilitar o GPS para envio de localização.", Toast.LENGTH_LONG).show();
+            return;
         }
 
         apiService.insertData(userId, vendorId, productId, latitude, longitude, value, new ApiService.ApiCallback() {
