@@ -3,22 +3,37 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:gravity="center"
     android:padding="16dp">
 
+    <!-- Elemento da logo -->
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginBottom="24dp"
+        android:contentDescription="Logo da Aplicação"
+        android:src="@drawable/logo_transparent" />
+
+    <!-- Campo para Documento -->
     <EditText
         android:id="@+id/document"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Documento"
-        android:inputType="text" />
+        android:inputType="text"
+        android:layout_marginBottom="16dp" />
 
+    <!-- Campo para Senha -->
     <EditText
         android:id="@+id/password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Senha"
-        android:inputType="textPassword" />
+        android:inputType="textPassword"
+        android:layout_marginBottom="24dp" />
 
+    <!-- Botão de Login -->
     <Button
         android:id="@+id/btn_login"
         android:layout_width="match_parent"

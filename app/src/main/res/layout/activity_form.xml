@@ -6,6 +6,41 @@
     android:layout_height="match_parent"
     tools:context=".FormActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:elevation="4dp">
+
+        <!-- Título da toolbar -->
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="INSERIR AVISO"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
+            android:layout_gravity="center"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp" />
+
+        <!-- Botão de usuário -->
+        <ImageButton
+            android:id="@+id/user_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/icon_user_circle"
+            android:contentDescription="User Options"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="8dp"
+            android:layout_gravity="end" />
+    </androidx.appcompat.widget.Toolbar>
 
     <TextView
         android:id="@+id/text_label_nome"
@@ -13,31 +48,10 @@
         android:layout_height="35dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="14dp"
-        android:text="ProductID"
+        android:textSize="20dp"
+        android:text="Categoria"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_text_vendor_id" />
-
-    <Button
-        android:id="@+id/button_inserir"
-        android:layout_width="120dp"
-        android:layout_height="70dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginBottom="25dp"
-        android:text="@string/button_inserir_label"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        />
-
-    <Button
-        android:id="@+id/button_voltar"
-        android:layout_width="120dp"
-        android:layout_height="70dp"
-        android:layout_marginEnd="28dp"
-        android:layout_marginBottom="25dp"
-        android:text="@string/button_voltar_label"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        />
 
     <TextView
         android:id="@+id/textView4"
@@ -91,7 +105,8 @@
         android:layout_height="37dp"
         android:layout_marginStart="33dp"
         android:layout_marginTop="23dp"
-        android:text="Value"
+        android:text="Valor"
+        android:textSize="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinner_product_id" />
 
@@ -105,5 +120,43 @@
         android:inputType="text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+    <!-- Extended Floating Action Button para "Inserir" no canto inferior direito -->
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fab_voltar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+
+        android:backgroundTint="#6750a4"
+        android:contentDescription="Voltar"
+        android:drawableLeft="@drawable/icon_back"
+        android:icon="@drawable/icon_back"
+        android:text="VOLTAR"
+        android:textColor="@color/white"
+        android:textSize="18dp"
+        app:cornerRadius="25dp"
+        app:iconTint="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- Extended Floating Action Button para "Inserir" no canto inferior direito -->
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fab_salvar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+
+        android:backgroundTint="#6750a4"
+        android:contentDescription="Salvar"
+        android:drawableLeft="@drawable/icon_check"
+        android:icon="@drawable/icon_plus"
+        android:text="SALVAR"
+        android:textColor="@color/white"
+        android:textSize="18dp"
+        app:cornerRadius="25dp"
+        app:iconTint="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,10 +3,12 @@ package com.example.avisaaqui;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -18,11 +20,13 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.avisaaqui.SpinnerItem;
 import com.example.avisaaqui.SpinnerItemAdapter;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -59,8 +63,6 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
         spinner_product_id = findViewById(R.id.spinner_product_id);
         obtemProductsIds();
 
-        button_inserir = findViewById(R.id.button_inserir);
-        button_voltar = findViewById(R.id.button_voltar);
         edit_text_vendor_id = findViewById(R.id.edit_text_vendor_id);
         edit_text_value = findViewById(R.id.edit_text_value);
 
@@ -73,19 +75,6 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
         }
         mlocManager.requestLocationUpdates(LocationManager.FUSED_PROVIDER, 0, 0, this);
 
-        button_inserir.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                inserirDados();
-            }
-        });
-
-        button_voltar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
 
         // Configurar o listener de seleção do Spinner
         spinner_product_id.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -121,6 +110,41 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
                 // Caso nada seja selecionado, se necessário, redefina o placeholder
                 edit_text_value.setHint("Selecione um item");
             }
+        });
+
+        ExtendedFloatingActionButton button_float_salvar = findViewById(R.id.fab_salvar);
+        button_float_salvar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                inserirDados();
+            }
+        });
+
+        ExtendedFloatingActionButton button_float_voltar = findViewById(R.id.fab_voltar);
+        button_float_voltar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+        ImageButton userButton = findViewById(R.id.user_button);
+        userButton.setOnClickListener(view -> {
+            PopupMenu popupMenu = new PopupMenu(this, userButton);
+            popupMenu.getMenuInflater().inflate(R.menu.user_menu, popupMenu.getMenu());
+            popupMenu.setOnMenuItemClickListener(item -> {
+                int itemId = item.getItemId();
+                if (itemId == R.id.menu_profile) {// Ação para o perfil
+                    return true;
+                } else if (itemId == R.id.menu_settings) {// Ação para as configurações
+                    return true;
+                } else if (itemId == R.id.menu_logout) {// Ação para sair
+                    finishAffinity();
+                    return true;
+                }
+                return false;
+            });
+            popupMenu.show();
         });
 
     }

@@ -6,18 +6,44 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
+    <!-- Toolbar com ícone de voltar e botão de usuário -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="20dp"
-        android:text="Menu"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:textStyle="bold"
+        android:background="?attr/colorPrimary"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:elevation="4dp">
 
+        <!-- Título da toolbar -->
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="MENU"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
+            android:layout_gravity="center"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp" />
+
+        <!-- Botão de usuário -->
+        <ImageButton
+            android:id="@+id/user_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/icon_user_circle"
+            android:contentDescription="User Options"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="8dp"
+            android:layout_gravity="end" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <!-- Botão Abrir Inserção (opcional para visualização) -->
     <Button
         android:id="@+id/button_abrir_insercao"
         android:layout_width="120dp"
@@ -26,8 +52,11 @@
         android:layout_marginTop="144dp"
         android:text="@string/button_abrir_insercao_label"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        android:visibility="gone"
+        tools:visibility="gone"/>
 
+    <!-- Outros botões (exemplo) -->
     <Button
         android:id="@+id/button_abrir_consulta"
         android:layout_width="120dp"
@@ -52,14 +81,22 @@
         app:layout_constraintTop_toBottomOf="@+id/button_abrir_consulta"
         tools:visibility="gone" />
 
-    <Button
-        android:id="@+id/button_sair"
-        android:layout_width="120dp"
-        android:layout_height="70dp"
-        android:layout_marginEnd="27dp"
-        android:layout_marginBottom="25dp"
-        android:text="@string/button_sair_label"
+    <!-- Extended Floating Action Button para "Inserir" no canto inferior direito -->
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fab_inserir"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:backgroundTint="#6750a4"
+        android:contentDescription="Inserir"
+        android:drawableLeft="@drawable/icon_plus"
+
+        android:icon="@drawable/icon_plus"
+        android:text="INSERIR"
+        android:textColor="@color/white"
+        android:textSize="18dp"
+        app:cornerRadius="25dp"
+        app:iconTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
