@@ -8,6 +8,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -20,11 +22,19 @@ import okhttp3.Response;
 public class ApiService {
 
     private static final String BASE_URL = "http://177.44.248.19:8080/api/v1";
-    private static final String BEARER_TOKEN = "ZXZlbnRmdWxsOmV2ZW50ZnVsbA==";
+    private static String BEARER_TOKEN;
     private final OkHttpClient client;
 
-    public ApiService() {
+    public ApiService(Context context) {
         client = new OkHttpClient();
+        Properties properties = new Properties();
+        try (InputStream input = context.getAssets().open("config.properties")) {
+            properties.load(input);
+            BEARER_TOKEN = properties.getProperty("BEARER_TOKEN");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
     }
 
     // Método para login de usuário

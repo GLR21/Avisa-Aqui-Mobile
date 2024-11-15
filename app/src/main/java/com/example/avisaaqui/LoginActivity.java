@@ -23,7 +23,7 @@ public class LoginActivity extends AppCompatActivity {
         passwordEditText = findViewById(R.id.password);
         loginButton = findViewById(R.id.btn_login);
 
-        apiService = new ApiService();
+        apiService = new ApiService(this);
 
         loginButton.setOnClickListener(v -> loginUser());
     }

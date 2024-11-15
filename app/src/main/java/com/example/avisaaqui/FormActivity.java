@@ -58,7 +58,7 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form);
 
-        apiService = new ApiService();
+        apiService = new ApiService(this);
 
         spinner_product_id = findViewById(R.id.spinner_product_id);
         obtemProductsIds();
