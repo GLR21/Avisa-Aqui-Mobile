@@ -17,6 +17,6 @@
     <!-- Opção de Sair -->
     <item
         android:id="@+id/menu_logout"
-        android:title="Sair" />
+        android:title="@string/button_sair_label" />
 
 </menu>
