@@ -22,7 +22,7 @@
             android:id="@+id/toolbar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="MENU"
+            android:text=""
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
@@ -35,7 +35,7 @@
         <ImageButton
             android:id="@+id/user_button"
             android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_height="48dp"
             android:src="@drawable/icon_user_circle"
             android:contentDescription="User Options"
             android:background="?attr/selectableItemBackgroundBorderless"
