@@ -16,6 +16,10 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.text.InputFilter;
+import android.text.InputType;
+import android.text.method.DigitsKeyListener;
+import android.text.method.TextKeyListener;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -43,6 +47,7 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
     private Button button_voltar;
     private EditText edit_text_vendor_id;
     private Spinner spinner_product_id;
+    private Spinner spinner_boolean;
     private EditText edit_text_value;
 
     private String latitude;
@@ -75,6 +80,13 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
         }
         mlocManager.requestLocationUpdates(LocationManager.FUSED_PROVIDER, 0, 0, this);
 
+        spinner_boolean = findViewById(R.id.spinner_boolean);
+        List<SpinnerItem> items = new ArrayList<>();
+        items.add(new SpinnerItem("", "Selecione um valor"));
+        items.add(new SpinnerItem("0", "Não"));
+        items.add(new SpinnerItem("1", "Sim"));
+        SpinnerItemAdapter adapter = new SpinnerItemAdapter(this, items);
+        spinner_boolean.setAdapter(adapter);
 
         // Configurar o listener de seleção do Spinner
         spinner_product_id.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -83,21 +95,38 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
                 // Obter o item selecionado
                 SpinnerItem selectedItem = (SpinnerItem) parent.getItemAtPosition(position);
 
+                edit_text_value.setKeyListener(null); // Remove qualquer KeyListener customizado
+                edit_text_value.setFilters(new InputFilter[0]);
+                edit_text_value.setText("");
+                edit_text_value.setVisibility(View.VISIBLE);
+                spinner_boolean.setSelection(0);
+                spinner_boolean.setVisibility(View.GONE);
+
                 // Atualizar o placeholder do EditText com o valor do campo desejado
                 switch(selectedItem.getType()){
                     case "INT":
+                        edit_text_value.setInputType(InputType.TYPE_CLASS_NUMBER);
                         hint = "Informe um valor inteiro";
                         break;
                     case "TEXT":
+                        edit_text_value.setInputType(InputType.TYPE_CLASS_TEXT);
+//                        edit_text_value.setKeyListener(TextKeyListener.getInstance()); // Adiciona o comportamento padrão para texto
                         hint = "Informe um texto";
                         break;
                     case "FLOAT":
+                        edit_text_value.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
                         hint = "Informe um valor decimal";
                         break;
                     case "LOGIC":
+                        edit_text_value.setVisibility(View.GONE);
+                        spinner_boolean.setVisibility(View.VISIBLE);
+//                        edit_text_value.setInputType(InputType.TYPE_CLASS_NUMBER);
+//                        edit_text_value.setKeyListener(DigitsKeyListener.getInstance("01"));
+//                        edit_text_value.setFilters(new InputFilter[] { new InputFilter.LengthFilter(1) });
                         hint = "Informe um valor lógico (0 ou 1)";
                         break;
                     default:
+                        edit_text_value.setInputType(InputType.TYPE_NULL);
                         hint = "Informe um valor";
                         break;
                 }
@@ -161,7 +190,13 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
             return;
         }
 
-        String value = String.valueOf(edit_text_value.getText());
+        String value;
+        if (spinnerItem.getType().equals("LOGIC")) {
+            value = ((SpinnerItem) spinner_boolean.getSelectedItem()).getValue();
+        } else {
+            value = String.valueOf(edit_text_value.getText());
+        }
+
         String regex = spinnerItem.getRegex();
 
         if (!regex.isEmpty()) {
@@ -196,6 +231,11 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
             }
 
             @Override
+            public void onSuccess(Object response) {
+
+            }
+
+            @Override
             public void onFailure(String error) {
                 runOnUiThread(new Runnable() {
                     @Override
@@ -211,6 +251,9 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
         edit_text_vendor_id.setText("");
         edit_text_value.setText("");
         spinner_product_id.setSelection(0);
+        spinner_boolean.setSelection(0);
+        edit_text_value.setVisibility(View.VISIBLE);
+        spinner_boolean.setVisibility(View.GONE);
     }
 
     @Override
@@ -249,6 +292,11 @@ public class FormActivity extends AppCompatActivity implements LocationListener 
                     });
 
                 }
+            }
+
+            @Override
+            public void onSuccess(Object response) {
+
             }
 
             @Override
