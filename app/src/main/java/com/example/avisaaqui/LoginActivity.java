@@ -50,6 +50,11 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
+            public void onSuccess(Object response) {
+
+            }
+
+            @Override
             public void onFailure(String error) {
                 runOnUiThread(() -> Toast.makeText(LoginActivity.this, error, Toast.LENGTH_SHORT).show());
             }
