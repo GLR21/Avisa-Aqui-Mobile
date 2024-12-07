@@ -9,6 +9,8 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import okhttp3.Call;
@@ -24,9 +26,11 @@ public class ApiService {
     private static final String BASE_URL = "http://177.44.248.19:8080/api/v1";
     private static String BEARER_TOKEN;
     private final OkHttpClient client;
+    private Context context;
 
     public ApiService(Context context) {
-        client = new OkHttpClient();
+        this.client = new OkHttpClient();
+        this.context = context;
         Properties properties = new Properties();
         try (InputStream input = context.getAssets().open("config.properties")) {
             properties.load(input);
@@ -180,9 +184,66 @@ public class ApiService {
         });
     }
 
+    public void getIncidents(ApiCallback callback) {
+        String userId = SessionManager.getUserId(context);
+        String url = BASE_URL + "/incidents?ref_user=" + userId;
+
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("Authorization", "Bearer " + BEARER_TOKEN)
+                .get()
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d("AvisaAqui.getIncidents.onFailure", e.toString());
+                callback.onFailure("Erro ao obter incidents");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response.body().string());
+                        JSONArray jsonArray = jsonObject.getJSONArray("data");
+
+                        List<Incident> incidentList = new ArrayList<>();
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject incidentObject = jsonArray.getJSONObject(i);
+
+                            // Criação de um objeto Incident a partir do JSON
+                            Incident incident = new Incident(
+                                    incidentObject.getInt("id"),
+                                    incidentObject.getInt("ref_user"),
+                                    incidentObject.getInt("ref_category"),
+                                    incidentObject.getString("latitude"),
+                                    incidentObject.getString("longitude"),
+                                    incidentObject.getString("value"),
+                                    incidentObject.getBoolean("active"),
+                                    incidentObject.getString("dt_register")
+                            );
+                            incidentList.add(incident);
+                        }
+
+                        // Passa a lista para o callback
+                        callback.onSuccess(incidentList);
+                    } catch (Exception e) {
+                        Log.d("AvisaAqui.getIncidents.onResponse.catch", e.toString());
+                        callback.onFailure("Erro ao processar resposta dos incidents");
+                    }
+                } else {
+                    Log.d("AvisaAqui.getIncidents.onResponse.else", response.body().string());
+                    callback.onFailure("Falha ao obter incidents");
+                }
+            }
+        });
+    }
+
     // Interface de callback para respostas assíncronas
-    public interface ApiCallback {
+    public interface ApiCallback<T> {
         void onSuccess(String response);
+        void onSuccess(T response);
         void onFailure(String error);
     }
 }
