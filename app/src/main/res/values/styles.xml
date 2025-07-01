@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Botão de Inserir - Roxo principal -->
+    <style name="Widget.AvisaAqui.ExtendedFabPrimaryPurple" parent="Widget.MaterialComponents.ExtendedFloatingActionButton">
+        <item name="backgroundTint">@color/primaryPurple</item>
+        <item name="cornerRadius">16dp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="iconTint">@color/white</item>
+    </style>
+
+    <!-- Botão de Mapa - Verde de destaque -->
+    <style name="Widget.AvisaAqui.ExtendedFabAccentGreen" parent="Widget.MaterialComponents.ExtendedFloatingActionButton">
+        <item name="backgroundTint">@color/accentGreen</item>
+        <item name="cornerRadius">16dp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="iconTint">@color/white</item>
+    </style>
+
+    <style name="Widget.AvisaAqui.PrimaryButton" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/primaryPurple</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="cornerRadius">20dp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Widget.AvisaAqui.SecondaryButton" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/accentGreen</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="cornerRadius">20dp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Widget.AvisaAqui.EditText" parent="Widget.MaterialComponents.TextInputEditText.OutlinedBox">
+        <item name="android:backgroundTint">@color/primaryPurple</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textColorHint">@color/lightPurple</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:padding">12dp</item>
+        <item name="boxStrokeColor">@color/primaryPurple</item>
+        <item name="boxBackgroundColor">@color/white</item>
+        <item name="cornerRadius">12dp</item>
+    </style>
+
+</resources>
