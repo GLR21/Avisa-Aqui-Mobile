@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
@@ -17,6 +18,28 @@
         android:theme="@style/Theme.AvisaAqui"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
+        <!--
+             TODO: Before you run your application, you need a Google Maps API key.
+
+             To get one, follow the directions here:
+
+                https://developers.google.com/maps/documentation/android-sdk/get-api-key
+
+             Once you have your API key (it starts with "AIza"), define a new property in your
+             project's local.properties file (e.g. MAPS_API_KEY=Aiza...), and replace the
+             "YOUR_API_KEY" string in this file with "${MAPS_API_KEY}".
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyC3A8cRsWAHttdlMeZhVKTqdLY-zO0SUpY" />
+
+
+        <!-- Nova Activity do Mapa -->
+        <activity
+            android:name=".MapsActivity"
+            android:exported="false"
+            android:label="Mapa de Incidentes" />
         <activity
             android:name=".LoginActivity"
             android:exported="true">
@@ -29,16 +52,14 @@
         <activity
             android:name=".FormActivity"
             android:exported="false" />
+
         <activity
-            android:name=".RequestActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ViewActivity"
-            android:exported="false" />
+            android:name=".RegisterActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AvisaAqui" />
         <activity
             android:name=".MainActivity"
-            android:exported="false">
-        </activity>
+            android:exported="false"></activity>
     </application>
 
 </manifest>

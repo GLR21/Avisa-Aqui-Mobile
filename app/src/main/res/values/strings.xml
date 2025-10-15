@@ -6,4 +6,5 @@
     <string name="button_inserir_label">Inserir</string>
     <string name="button_voltar_label">Voltar</string>
     <string name="button_sair_label">Sair</string>
+    <string name="title_activity_maps2">MapsActivity2</string>
 </resources>

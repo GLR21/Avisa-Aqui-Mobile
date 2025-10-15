@@ -5,9 +5,6 @@ import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-/**
- * Created by wolf on 15/03/17.
- */
 
 public class DatabaseManager extends SQLiteOpenHelper {
     public DatabaseManager(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {

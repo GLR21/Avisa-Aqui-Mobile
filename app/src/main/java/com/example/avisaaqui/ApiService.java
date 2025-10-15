@@ -23,7 +23,7 @@ import okhttp3.Response;
 
 public class ApiService {
 
-    private static final String BASE_URL = "http://177.44.248.19:8080/api/v1";
+    private static final String BASE_URL = "http://177.44.248.82:8080/api/v1";
     private static String BEARER_TOKEN;
     private final OkHttpClient client;
     private Context context;
@@ -38,7 +38,56 @@ public class ApiService {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+    }
 
+    // Método para cadastro de usuário (NOVO)
+    public void registerUser(String email, String name, String cpf, String password, ApiCallback callback) {
+        JSONObject registerData = new JSONObject();
+        try {
+            registerData.put("email", email);
+            registerData.put("name", name);
+            registerData.put("document", cpf); // Assumindo que o CPF é o documento
+            registerData.put("password", password);
+        } catch (Exception e) {
+            e.printStackTrace();
+            callback.onFailure("Erro ao criar dados de cadastro");
+            return;
+        }
+
+        String url = BASE_URL + "/users"; // Ajuste a URL conforme sua API
+        RequestBody body = RequestBody.create(registerData.toString(), MediaType.parse("application/json; charset=utf-8"));
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("Authorization", "Bearer " + BEARER_TOKEN)
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d("AvisaAqui.Register", e.toString());
+                callback.onFailure("Erro de conexão");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    callback.onSuccess("Cadastro realizado com sucesso");
+                } else {
+                    Log.d("AvisaAqui.Register", "Response code: " + response.code());
+                    Log.d("AvisaAqui.Register", "Body: " + response.body().string());
+
+                    // Tratar diferentes códigos de erro
+                    if (response.code() == 409) {
+                        callback.onFailure("Usuário já existe");
+                    } else if (response.code() == 400) {
+                        callback.onFailure("Dados inválidos");
+                    } else {
+                        callback.onFailure("Falha no cadastro");
+                    }
+                }
+            }
+        });
     }
 
     // Método para login de usuário
@@ -71,7 +120,6 @@ public class ApiService {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
-
                     callback.onSuccess("Login realizado com sucesso");
 
                     // Converte o body para String
@@ -168,9 +216,8 @@ public class ApiService {
                 if (response.isSuccessful()) {
                     try {
                         JSONObject jsonObject = new JSONObject(response.body().string());
-                        //System.out.println(   );
-                        JSONArray  jsonArray  = jsonObject.getJSONArray("data");
-                        callback.onSuccess(jsonArray.toString());  // Passar a resposta como String
+                        JSONArray jsonArray = jsonObject.getJSONArray("data");
+                        callback.onSuccess(jsonArray.toString());
                     } catch (Exception e) {
                         e.printStackTrace();
                         Log.d("AvisaAqui.getProductsIds.onResponse.if.catch", e.toString());
@@ -239,6 +286,37 @@ public class ApiService {
             }
         });
     }
+
+    public void resolverIncident(int incidentId, ApiCallback callback) {
+        String url = BASE_URL + "/incidents/" + incidentId + "/resolve";
+
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("Authorization", "Bearer " + BEARER_TOKEN)
+                .get()
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d("AvisaAqui.resolverIncident.onFailure", e.toString());
+                callback.onFailure("Erro de conexão ao resolver incidente");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    Log.d("AvisaAqui.resolverIncident", "Incidente " + incidentId + " resolvido com sucesso");
+                    callback.onSuccess("Incidente resolvido com sucesso");
+                } else {
+                    Log.d("AvisaAqui.resolverIncident.onResponse.else", "Response code: " + response.code());
+                    Log.d("AvisaAqui.resolverIncident.onResponse.else", "Body: " + response.body().string());
+                    callback.onFailure("Falha ao resolver incidente");
+                }
+            }
+        });
+    }
+
 
     // Interface de callback para respostas assíncronas
     public interface ApiCallback<T> {

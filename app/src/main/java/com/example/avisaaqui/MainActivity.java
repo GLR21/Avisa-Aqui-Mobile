@@ -7,26 +7,26 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-
-    private Button button_abrir_insercao = null;
-    private Button button_abrir_consulta = null;
-    private Button button_abrir_requisicao = null;
-    private RecyclerView cards_incidents = null;
+    private ExtendedFloatingActionButton button_abrir_mapa;
+    private RecyclerView cards_incidents;
     private ApiService apiService;
     private List<Incident> incidentList = new ArrayList<>();
+    private List<SpinnerItem> categoriaList = new ArrayList<>(); // CATEGORIAS
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,41 +35,16 @@ public class MainActivity extends AppCompatActivity {
 
         apiService = new ApiService(this);
 
-        button_abrir_insercao = findViewById(R.id.button_abrir_insercao);
-        button_abrir_consulta = findViewById(R.id.button_abrir_consulta);
-        button_abrir_requisicao = findViewById(R.id.button_abrir_requisicao);
-
-        button_abrir_insercao.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, FormActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        button_abrir_consulta.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, ViewActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        button_abrir_requisicao.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, RequestActivity.class);
-                startActivity(intent);
-            }
+        button_abrir_mapa = findViewById(R.id.button_abrir_mapa);
+        button_abrir_mapa.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+            startActivity(intent);
         });
 
         ExtendedFloatingActionButton button_float_insercao = findViewById(R.id.fab_inserir);
-        button_float_insercao.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, FormActivity.class);
-                startActivity(intent);
-            }
+        button_float_insercao.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, FormActivity.class);
+            startActivity(intent);
         });
 
         ImageButton userButton = findViewById(R.id.user_button);
@@ -78,11 +53,9 @@ public class MainActivity extends AppCompatActivity {
             popupMenu.getMenuInflater().inflate(R.menu.user_menu, popupMenu.getMenu());
             popupMenu.setOnMenuItemClickListener(item -> {
                 int itemId = item.getItemId();
-                if (itemId == R.id.menu_profile) {// Ação para o perfil
-                    return true;
-                } else if (itemId == R.id.menu_settings) {// Ação para as configurações
-                    return true;
-                } else if (itemId == R.id.menu_logout) {// Ação para sair
+                if (itemId == R.id.menu_profile) return true;
+                else if (itemId == R.id.menu_settings) return true;
+                else if (itemId == R.id.menu_logout) {
                     finishAffinity();
                     return true;
                 }
@@ -91,30 +64,57 @@ public class MainActivity extends AppCompatActivity {
             popupMenu.show();
         });
 
-        // Referências para os elementos da interface
         cards_incidents = findViewById(R.id.recycler_view_incidentes);
-        TextView placeholder = findViewById(R.id.placeholder_no_data);
-
-        // Lista de incidentes simulada
-        listaIncidentes();
-
-        // Configura o RecyclerView
         cards_incidents.setLayoutManager(new LinearLayoutManager(this));
         cards_incidents.setHasFixedSize(true);
+
+        carregarCategorias(); // Primeiro passo
+    }
+
+    private void carregarCategorias() {
+        apiService.getProductIds(new ApiService.ApiCallback<String>() {
+            @Override
+            public void onSuccess(String response) {
+                try {
+                    List<SpinnerItem> lista = new ArrayList<>();
+                    JSONArray jsonArray = new JSONArray(response);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jso = jsonArray.getJSONObject(i);
+                        lista.add(new SpinnerItem(
+                                jso.getString("id"),
+                                jso.getString("description"),
+                                jso.getString("regex_validation"),
+                                jso.getString("type")
+                        ));
+                    }
+                    runOnUiThread(() -> {
+                        categoriaList = lista;
+                        listaIncidentes(); // Chama incidentes depois de ter categorias
+                    });
+                } catch (JSONException e) {
+                    runOnUiThread(() -> {
+                        Toast.makeText(MainActivity.this, "Erro ao processar categorias", Toast.LENGTH_SHORT).show();
+                    });
+                }
+            }
+
+
+            @Override
+            public void onFailure(String error) {
+                runOnUiThread(() -> {
+                    Toast.makeText(MainActivity.this, "Erro ao carregar categorias: " + error, Toast.LENGTH_SHORT).show();
+                });
+            }
+        });
     }
 
     private void listaIncidentes() {
         apiService.getIncidents(new ApiService.ApiCallback<List<Incident>>() {
             @Override
-            public void onSuccess(String response) {
-                System.out.println("teste");
-            }
+            public void onSuccess(String response) {}
 
             @Override
             public void onSuccess(List<Incident> result) {
-                // Atualiza o RecyclerView com os dados recebidos
-                System.out.println("teste2");
-                System.out.println(result);
                 runOnUiThread(() -> {
                     incidentList = result;
                     atualizarCards();
@@ -123,9 +123,6 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(String errorMessage) {
-                // Exibe uma mensagem de erro
-                System.out.println("teste3");
-
                 runOnUiThread(() -> {
                     incidentList = new ArrayList<>();
                     atualizarCards();
@@ -144,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
             cards_incidents.setVisibility(View.VISIBLE);
             placeholder.setVisibility(View.GONE);
 
-            IncidentAdapter adapter = new IncidentAdapter(incidentList);
+            IncidentAdapter adapter = new IncidentAdapter(incidentList, categoriaList, this);
             cards_incidents.setAdapter(adapter);
         }
     }
@@ -152,6 +149,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        listaIncidentes();
+        carregarCategorias(); // Recarrega categorias e incidentes ao voltar
     }
 }

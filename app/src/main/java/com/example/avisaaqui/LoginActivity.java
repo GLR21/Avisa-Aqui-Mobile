@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class LoginActivity extends AppCompatActivity {
 
     private EditText documentEditText, passwordEditText;
-    private Button loginButton;
+    private Button loginButton, registerButton;
     private ApiService apiService;
 
     @Override
@@ -22,10 +22,12 @@ public class LoginActivity extends AppCompatActivity {
         documentEditText = findViewById(R.id.document);
         passwordEditText = findViewById(R.id.password);
         loginButton = findViewById(R.id.btn_login);
+        registerButton = findViewById(R.id.btn_register); // Novo botão
 
         apiService = new ApiService(this);
 
         loginButton.setOnClickListener(v -> loginUser());
+        registerButton.setOnClickListener(v -> openRegisterActivity()); // Novo listener
     }
 
     private void loginUser() {
@@ -51,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onSuccess(Object response) {
-
+                // Método não utilizado neste contexto
             }
 
             @Override
@@ -59,5 +61,10 @@ public class LoginActivity extends AppCompatActivity {
                 runOnUiThread(() -> Toast.makeText(LoginActivity.this, error, Toast.LENGTH_SHORT).show());
             }
         });
+    }
+
+    private void openRegisterActivity() {
+        Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+        startActivity(intent);
     }
 }

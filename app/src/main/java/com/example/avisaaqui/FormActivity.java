@@ -8,7 +8,6 @@ import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -18,8 +17,6 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.text.InputFilter;
 import android.text.InputType;
-import android.text.method.DigitsKeyListener;
-import android.text.method.TextKeyListener;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -28,8 +25,6 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.avisaaqui.SpinnerItem;
-import com.example.avisaaqui.SpinnerItemAdapter;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import org.json.JSONArray;

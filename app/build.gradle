@@ -1,10 +1,11 @@
 plugins {
     id 'com.android.application'
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin' version '2.0.1'
 }
 
 android {
     namespace 'com.example.avisaaqui'
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         applicationId "com.example.avisaaqui"
@@ -26,6 +27,9 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
@@ -36,10 +40,16 @@ dependencies {
     implementation 'com.android.volley:volley:1.2.1'
     implementation 'androidx.activity:activity:1.9.2'
     implementation 'com.squareup.okhttp3:okhttp:4.9.1'
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
+    implementation 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:2.0.1'
+    implementation 'com.google.android.gms:play-services-maps:19.2.0'
+    implementation 'com.google.maps.android:android-maps-utils:3.14.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
     // ADICIONADO POIS ESTAVA DANDO PROBLEMA SIMILAR https://gist.github.com/danielcshn/7aa57155d766d46c043fde015f054d40
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.0"))
+    implementation 'com.google.android.material:material:1.11.0' // ou versão recente
 }
+
